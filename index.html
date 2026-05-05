@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<!-- 声明文档语言为简体中文 -->
+<html lang="zh-CN">
+<head>
+  <!-- 字符编码：UTF-8，确保中文正常显示 -->
+  <meta charset="UTF-8">
+  <!-- 视口：移动端自适应缩放 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 页面标题：显示在浏览器标签栏 -->
+  <title>王友 - 个人作品集</title>
+  <!-- 引入 Google 字体：Inter（英文）+ Noto Sans SC（中文） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- 引入外部样式表 -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ========== 顶部固定导航栏 ========== -->
+  <!-- position:fixed 固定在页面顶部，滚动时显示毛玻璃效果 -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <!-- 左侧 Logo：渐变紫色方块 + 白色字母 W -->
+      <a href="#hero" class="nav-logo">
+        <div class="logo-icon">
+          <span class="logo-text">W</span>
+        </div>
+      </a>
+      <!-- 中间导航链接：点击平滑滚动到对应区域 -->
+      <!-- href="#id" 配合 CSS scroll-behavior:smooth 实现平滑跳转 -->
+      <ul class="nav-links">
+        <li><a href="#hero" class="nav-link active">首页</a></li>
+        <li><a href="#about" class="nav-link">关于</a></li>
+        <li><a href="#projects" class="nav-link">项目</a></li>
+        <li><a href="#awards" class="nav-link">奖项</a></li>
+        <li><a href="#contact" class="nav-link">联系</a></li>
+      </ul>
+      <!-- 右侧汉堡菜单按钮：仅在移动端显示（≤768px） -->
+      <button class="nav-toggle" id="navToggle" aria-label="菜单">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========== 移动端全屏菜单 ========== -->
+  <!-- 默认隐藏，点击汉堡按钮后通过 JS 添加 .open 类显示 -->
+  <div class="mobile-menu" id="mobileMenu">
+    <ul class="mobile-nav-links">
+      <li><a href="#hero" class="mobile-link">首页</a></li>
+      <li><a href="#about" class="mobile-link">关于</a></li>
+      <li><a href="#projects" class="mobile-link">项目</a></li>
+      <li><a href="#awards" class="mobile-link">奖项</a></li>
+      <li><a href="#contact" class="mobile-link">联系</a></li>
+    </ul>
+  </div>
+
+  <!-- ========== Hero 首屏区域 ========== -->
+  <!-- 全屏高度(min-height:100vh)，包含头像、姓名、标语和渐变光斑背景 -->
+  <section class="hero" id="hero">
+    <!-- 背景渐变光斑：3个半透明圆形，用 CSS blur 模糊，产生柔和的光晕效果 -->
+    <div class="hero-bg-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+    <!-- Hero 主要内容：左头像 + 右文字，flex 水平排列 -->
+    <div class="hero-content">
+      <!-- 头像区域：圆形头像 + 外圈脉冲光环 -->
+      <div class="hero-photo-wrapper">
+        <div class="hero-photo">
+          <!-- 【放照片】把照片放到项目文件夹的 photos 目录，修改下方 url 即可 -->
+          <!-- 例如：把你的照片命名为 hero.jpg 放到 photos/ 目录下 -->
+          <div class="hero-photo-bg" style="background-image: url('photos/hero.jpg')"></div>
+          <!-- 照片未放时显示的占位文字 -->
+          <div class="photo-placeholder">放照片</div>
+        </div>
+        <!-- 头像外圈光环：CSS 动画脉冲效果 -->
+        <div class="photo-ring"></div>
+      </div>
+      <!-- 右侧文字区域 -->
+      <div class="hero-text">
+        <p class="hero-greeting">你好，我是</p>
+        <!-- 姓名：渐变色文字（紫→粉），CSS background-clip:text 实现 -->
+        <h1 class="hero-name">王友</h1>
+        <p class="hero-title">国家一级退堂鼓演奏家 | 抽象实践者</p>
+        <p class="hero-tagline">相信美好的事情即将发生</p>
+        <!-- CTA 按钮组：渐变主按钮 + 透明边框按钮 -->
+        <div class="hero-actions">
+          <a href="#projects" class="btn btn-primary">查看作品</a>
+          <a href="#contact" class="btn btn-ghost">联系我</a>
+        </div>
+      </div>
+    </div>
+    <!-- 底部滚动提示线：CSS 动画上下脉冲 -->
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ========== 关于我区域 ========== -->
+  <!-- 背景色略深(#111122)，包含个人信息、数据统计、技能卡片 -->
+  <section class="section about" id="about">
+    <div class="container">
+      <!-- 区域标题：英文小标签 + 中文大标题 -->
+      <div class="section-header">
+        <span class="section-tag">About Me</span>
+        <h2 class="section-title">关于我</h2>
+      </div>
+      <!-- 上方：左照片 + 右文字，flex 布局 -->
+      <div class="about-grid">
+        <!-- 左侧照片 -->
+        <div class="about-photo-col">
+          <div class="about-photo-frame">
+            <!-- 【放照片】把照片命名为 about.jpg 放到 photos/ 目录下 -->
+            <div class="about-photo-bg" style="background-image: url('photos/about.jpg')"></div>
+            <div class="photo-placeholder large">放照片</div>
+          </div>
+        </div>
+        <!-- 右侧文字信息 -->
+        <div class="about-text-col">
+          <h3 class="about-name">王友</h3>
+          <p class="about-role">遇事就撤总指挥部 · 国家一级退堂鼓演奏家</p>
+          <div class="about-desc">
+            <p>2003年12月从快乐星球随机降落，现居摆烂星球贵阳分舵摸鱼基地。宇宙半途而废大学退堂鼓演奏专业本科在读，国家一级退堂鼓持证演奏家，遇事就撤专业排名常年稳坐前三，放弃速度比快递上门还快。</p>
+            <p>具备满级退堂鼓编曲、遇事开溜、躺平摆烂、临场怂阵与借口脑补能力，熟练运用摸鱼脑补、发呆放空两大专属技能。性格佛系随缘，遇事主打战略性撤退，能接受偷懒划水、间歇性摆烂与远程挂机，拥有超强甩锅共情和摸鱼组队实战天赋。</p>
+          </div>
+          <!-- 数据统计：渐变色数字 + 灰色标签 -->
+          <div class="about-stats">
+            <div class="stat-item">
+              <span class="stat-number">3</span>
+              <span class="stat-label">专业排名</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">7+</span>
+              <span class="stat-label">获奖经历</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">3</span>
+              <span class="stat-label">国家励志奖学金</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 下方：技能卡片网格，4列布局 -->
+      <div class="skills-section">
+        <h3 class="skills-title">专业技能</h3>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <div class="skill-icon">⚡</div>
+            <h4>半途而废调控</h4>
+            <p>佛系摆烂逻辑编程、懒人摸鱼能量分配规划</p>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon"> </div>
+            <h4>CAD绘图</h4>
+            <p>AutoCAD、EPLAN电气图纸绘制</p>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon"> </div>
+            <h4>设备调试</h4>
+            <p>设备故障排查与维修保养</p>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon"> </div>
+            <h4>工程实践</h4>
+            <p>机械创新设计、工程实践与创新能力</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 项目展示区域 ========== -->
+  <!-- 2列网格布局，每个项目卡片上半部分是照片，下半部分是文字信息 -->
+  <section class="section projects" id="projects">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Projects</span>
+        <h2 class="section-title">项目作品</h2>
+      </div>
+      <!-- 项目卡片网格：CSS grid 2列 -->
+      <div class="projects-grid">
+        <!-- 项目卡片 1 -->
+        <!-- 【放照片】把项目照片命名为 project1.jpg 放到 photos/ 目录下 -->
+        <div class="project-card">
+          <!-- 上半部分：项目照片区域（CSS background-image 加载照片） -->
+          <!-- 修改下方 url('photos/project1.jpg') 中的路径即可更换照片 -->
+          <div class="project-image" style="background-image: url('photos/project1.jpg')">
+            <!-- 照片未放时显示的占位图标 -->
+            <div class="project-placeholder">
+              <div class="placeholder-icon"> </div>
+            </div>
+          </div>
+          <!-- 下半部分：项目文字信息 -->
+          <div class="project-info">
+            <h3 class="project-title">摆烂大赛</h3>
+            <p class="project-desc">第十一届全国大学生摆烂大赛，摆烂艺术家。</p>
+            <div class="project-tags">
+              <span class="tag">机械设计</span>
+              <span class="tag">创新</span>
+            </div>
+          </div>
+        </div>
+        <!-- 项目卡片 2 -->
+        <!-- 【放照片】把项目照片命名为 project2.jpg 放到 photos/ 目录下 -->
+        <div class="project-card">
+          <div class="project-image" style="background-image: url('photos/project2.jpg')">
+            <div class="project-placeholder">
+              <div class="placeholder-icon"> </div>
+            </div>
+          </div>
+          <div class="project-info">
+            <h3 class="project-title">摸鱼项目</h3>
+            <p class="project-desc">第十八届大学生摸鱼大赛参赛项目，最强摸鱼大师奖。</p>
+            <div class="project-tags">
+              <span class="tag">创新</span>
+              <span class="tag">创业</span>
+            </div>
+          </div>
+        </div>
+        <!-- 项目卡片 3 -->
+        <!-- 【放照片】把项目照片命名为 project3.jpg 放到 photos/ 目录下 -->
+        <div class="project-card">
+          <div class="project-image" style="background-image: url('photos/project3.jpg')">
+            <div class="project-placeholder">
+              <div class="placeholder-icon"> </div>
+            </div>
+          </div>
+          <div class="project-info">
+            <h3 class="project-title">工程实践与创新</h3>
+            <p class="project-desc">2025年大学生干饭能力大赛，干饭速度之王。</p>
+            <div class="project-tags">
+              <span class="tag">工程实践</span>
+              <span class="tag">创新</span>
+            </div>
+          </div>
+        </div>
+        <!-- 项目卡片 4 -->
+        <!-- 【放照片】把项目照片命名为 project4.jpg 放到 photos/ 目录下 -->
+        <div class="project-card">
+          <div class="project-image" style="background-image: url('photos/project4.jpg')">
+            <div class="project-placeholder">
+              <div class="placeholder-icon"> </div>
+            </div>
+          </div>
+          <div class="project-info">
+            <h3 class="project-title">技术</h3>
+            <p class="project-desc">2025年第十八届熬夜技术大赛，熬夜冠军。</p>
+            <div class="project-tags">
+              <span class="tag">机器人</span>
+              <span class="tag">仿真</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 底部"查看更多"按钮 -->
+      <div class="projects-more">
+        <button class="btn btn-outline" id="viewMoreBtn">查看更多项目</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 奖项荣誉区域 ========== -->
+  <!-- 时间线布局：左侧竖线 + 右侧卡片 -->
+  <section class="section awards" id="awards">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Awards</span>
+        <h2 class="section-title">获奖荣誉</h2>
+      </div>
+      <!-- 时间线容器：CSS ::before 伪元素绘制左侧竖线 -->
+      <div class="awards-timeline">
+        <!-- 每个 award-item 是一个时间节点，左侧有渐变色圆点 -->
+        <div class="award-item">
+          <div class="award-dot"></div>
+          <div class="award-content">
+            <span class="award-year">2025</span>
+            <h3>第十八届大学生摸鱼大赛</h3>
+            <p>摸鱼冠军</p>
+          </div>
+        </div>
+        <div class="award-item">
+          <div class="award-dot"></div>
+          <div class="award-content">
+            <span class="award-year">2025</span>
+            <h3>2025年第十八届熬夜技术大赛</h3>
+            <p>熬夜冠军</p>
+          </div>
+        </div>
+        <div class="award-item">
+          <div class="award-dot"></div>
+          <div class="award-content">
+            <span class="award-year">2024</span>
+            <h3>2025年大学生干饭能力大赛</h3>
+            <p>干饭王</p>
+          </div>
+        </div>
+        <div class="award-item">
+          <div class="award-dot"></div>
+          <div class="award-content">
+            <span class="award-year">2024</span>
+            <h3>第十一届全国大学生摆烂大赛</h3>
+            <p>摆烂大师</p>
+          </div>
+        </div>
+        <div class="award-item">
+          <div class="award-dot"></div>
+          <div class="award-content">
+            <span class="award-year">连续3年</span>
+            <h3>国家励志奖学金</h3>
+            <p>在校期间获得</p>
+          </div>
+        </div>
+        <div class="award-item">
+          <div class="award-dot"></div>
+          <div class="award-content">
+            <span class="award-year">荣誉</span>
+            <h3>省级三好学生 · 校三好学生 · 优秀团员</h3>
+            <p>综合素质奖学金</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 联系我区域 ========== -->
+  <!-- 3列联系卡片 + 底部留言表单 -->
+  <section class="section contact" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Contact</span>
+        <h2 class="section-title">联系我</h2>
+        <p class="section-subtitle">期待与您的合作与交流</p>
+      </div>
+      <!-- 联系方式卡片：电话、邮箱、地址 -->
+      <div class="contact-grid">
+        <div class="contact-card">
+          <!-- SVG 图标：电话 -->
+          <div class="contact-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <h4>电话</h4>
+          <p>18888好几个8</p>
+        </div>
+        <div class="contact-card">
+          <!-- SVG 图标：邮箱 -->
+          <div class="contact-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <h4>邮箱</h4>
+          <p>2888好几个8@qq.com</p>
+        </div>
+        <div class="contact-card">
+          <!-- SVG 图标：地址 -->
+          <div class="contact-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <h4>地址</h4>
+          <p>拉尼亚凯亚超星系团-本星系群-银河系-太阳系-地球</p>
+        </div>
+      </div>
+      <!-- 留言表单：名字、邮箱、内容、发送按钮 -->
+      <div class="message-form">
+        <h3>给我留言</h3>
+        <div class="form-row">
+          <input type="text" class="form-input" placeholder="你的名字" id="msgName">
+          <input type="email" class="form-input" placeholder="你的邮箱" id="msgEmail">
+        </div>
+        <textarea class="form-textarea" placeholder="留言内容..." rows="5" id="msgContent"></textarea>
+        <button class="btn btn-primary" id="msgSubmit">发送留言</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 页脚 ========== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <!-- 品牌标识 -->
+        <div class="footer-brand">
+          <div class="logo-icon small"><span class="logo-text">W</span></div>
+          <span class="footer-name">王友</span>
+        </div>
+        <!-- 座右铭 -->
+        <p class="footer-copy">相信美好的事情即将发生</p>
+        <!-- 外部链接 -->
+        <div class="footer-links">
+          <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+        </div>
+        <!-- 版权信息 -->
+        <p class="footer-copyright">&copy; 2026 王友. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== 底部音乐播放器 ========== -->
+  <!-- 固定在页面底部，毛玻璃背景，包含封面/曲目信息/控制按钮/进度条/音量 -->
+  <div class="player" id="player">
+    <div class="player-inner">
+      <!-- 左侧封面图 -->
+      <!-- 【放封面】把封面图命名为 cover.jpg 放到 photos/ 目录下 -->
+      <div class="player-cover">
+        <div class="player-cover-bg" style="background-image: url('photos/cover.jpg')"></div>
+        <div class="player-cover-placeholder">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55C7.79 13 6 14.79 6 17s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+        </div>
+      </div>
+      <!-- 曲目名称和副标题 -->
+      <div class="player-info">
+        <span class="player-title" id="playerTitle">加载中...</span>
+        <span class="player-artist" id="playerArtist">王友的播放列表</span>
+      </div>
+      <!-- 播放控制按钮：上一首 / 播放暂停 / 下一首 -->
+      <div class="player-controls">
+        <button class="player-btn-sm" id="playerPrev" title="上一首">
+          <!-- SVG：上一首图标 -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+        </button>
+        <button class="player-btn-play" id="playerToggle" title="播放/暂停">
+          <!-- SVG：播放图标（暂停时隐藏） -->
+          <svg class="icon-play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <!-- SVG：暂停图标（播放时显示） -->
+          <svg class="icon-pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+        <button class="player-btn-sm" id="playerNext" title="下一首">
+          <!-- SVG：下一首图标 -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+      </div>
+      <!-- 进度条：当前时间 / 可拖动进度条 / 总时长 -->
+      <div class="player-progress-wrap">
+        <span class="player-time" id="playerCurrentTime">0:00</span>
+        <!-- 进度条容器，点击可跳转播放位置 -->
+        <div class="player-progress" id="playerProgress">
+          <!-- 已播放部分的进度条 -->
+          <div class="player-progress-bar" id="playerProgressBar"></div>
+        </div>
+        <span class="player-time" id="playerDuration">0:00</span>
+      </div>
+      <!-- 音量控制：静音按钮 + 滑块 -->
+      <div class="player-volume">
+        <button class="player-btn-sm" id="playerMute" title="静音">
+          <!-- SVG：音量图标（有音量时显示） -->
+          <svg class="icon-vol" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+          <!-- SVG：静音图标（静音时显示） -->
+          <svg class="icon-mute" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+        </button>
+        <!-- 音量滑块：range 输入控件，0~1，步进 0.05 -->
+        <input type="range" class="player-vol-slider" id="playerVolume" min="0" max="1" step="0.05" value="0.7">
+      </div>
+    </div>
+  </div>
+
+  <!-- 隐藏的音频元素：JS 通过它控制音乐播放 -->
+  <audio id="bgAudio" preload="auto"></audio>
+
+  <!-- 引入外部 JavaScript 脚本 -->
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,1659 @@
+/* ============================================================
+   全局基础样式
+   包含：重置样式、CSS 变量定义、body 全局字体/背景/文字
+   ============================================================ */
+
+/* 全局重置：清除所有元素的默认内外边距，统一盒模型为 border-box */
+/* border-box 使 padding 不会撑大元素尺寸，布局更可控 */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* CSS 自定义属性（变量）：统一管理全站颜色、圆角、阴影等 */
+/* 修改此处变量即可全局换肤，无需逐个查找替换 */
+:root {
+  /* ----- 背景色 ----- */
+  --bg-primary: #0b0b14;          /* 【可改色】最深背景色，用于页面主体 */
+  --bg-secondary: #111122;        /* 【可改色】次深背景色，用于交替区域 */
+  --bg-card: #16162a;             /* 【可改色】卡片背景色 */
+  --bg-card-hover: #1c1c38;       /* 【可改色】卡片 hover 时背景色 */
+
+  /* ----- 文字颜色 ----- */
+  --text-primary: #e8e8f0;        /* 【可改色】主文字色（最亮） */
+  --text-secondary: #8888a8;      /* 【可改色】次级文字色 */
+  --text-muted: #55556e;          /* 【可改色】弱化文字色（最暗） */
+
+  /* ----- 强调色 ----- */
+  --accent-purple: #8b5cf6;       /* 【可改色】主强调色：紫色 */
+  --accent-pink: #ec4899;         /* 【可改色】辅助强调色：粉色 */
+  --accent-blue: #3b82f6;         /* 【可改色】辅助强调色：蓝色 */
+  --accent-cyan: #06b6d4;         /* 【可改色】辅助强调色：青色 */
+
+  /* ----- 渐变 ----- */
+  --gradient-main: linear-gradient(135deg, #8b5cf6, #ec4899);   /* 【可改渐变】主渐变：紫→粉 */
+  --gradient-sub: linear-gradient(135deg, #3b82f6, #06b6d4);     /* 【可改渐变】辅渐变：蓝→青 */
+
+  /* ----- 边框 ----- */
+  --border-color: rgba(255, 255, 255, 0.06);    /* 默认边框：极淡白色 */
+  --border-hover: rgba(139, 92, 246, 0.3);       /* hover 边框：紫色 */
+
+  /* ----- 圆角 ----- */
+  --radius-sm: 8px;       /* 小圆角：输入框、小按钮 */
+  --radius-md: 12px;      /* 中圆角：卡片 */
+  --radius-lg: 20px;      /* 大圆角：项目卡片、表单 */
+  --radius-xl: 28px;      /* 超大圆角：胶囊按钮 */
+
+  /* ----- 阴影 ----- */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3);            /* 卡片阴影 */
+  --shadow-glow: 0 0 40px rgba(139, 92, 246, 0.15);        /* 紫色发光阴影 */
+
+  /* ----- 过渡 ----- */
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);         /* 全局过渡动画曲线 */
+}
+
+/* HTML 根元素：开启平滑滚动，设置滚动偏移量（避开固定导航栏） */
+html {
+  scroll-behavior: smooth;          /* 点击锚点时平滑滚动 */
+  scroll-padding-top: 80px;         /* 滚动目标上方留出 80px（导航栏高度） */
+}
+
+/* 页面主体：全局字体、背景色、文字颜色 */
+body {
+  font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+  /* 字体优先级：Inter(英文) → Noto Sans SC(中文) → 苹果系统字体 → 系统默认 */
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;                 /* 行高 1.6 倍，阅读舒适 */
+  overflow-x: hidden;               /* 禁止水平滚动条 */
+  -webkit-font-smoothing: antialiased;  /* macOS 字体平滑渲染 */
+}
+
+/* 全局超链接：去掉下划线，继承父元素颜色 */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 全局图片：最大宽度 100%，块级显示 */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* 通用容器：最大宽度 1200px，水平居中，左右留白 24px */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ============================================================
+   顶部导航栏
+   特性：fixed 固定在顶部，滚动后添加毛玻璃背景
+   ============================================================ */
+
+/* 导航栏容器：固定定位，铺满顶部 */
+.navbar {
+  position: fixed;      /* 固定定位，不随页面滚动 */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;         /* 层级 100，确保在所有内容之上 */
+  padding: 16px 0;
+  /* 过渡：背景色、阴影、内边距同步变化 */
+  transition: background var(--transition), box-shadow var(--transition), padding var(--transition);
+}
+
+/* 导航栏滚动状态：JS 检测 scrollY > 50 时添加此类 */
+/* 半透明深色背景 + 毛玻璃模糊 + 底部边框线 */
+.navbar.scrolled {
+  background: rgba(11, 11, 20, 0.85);    /* 85% 透明度深色背景 */
+  backdrop-filter: blur(20px);            /* 毛玻璃（磨砂）模糊效果 */
+  -webkit-backdrop-filter: blur(20px);    /* Safari 兼容 */
+  box-shadow: 0 1px 0 var(--border-color); /* 底部细线 */
+  padding: 10px 0;                        /* 滚动后缩小上下内边距 */
+}
+
+/* 导航栏内部容器：Flex 布局，最大宽度 1200px */
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Logo 左，链接中，汉堡右 */
+}
+
+/* Logo 链接 */
+.nav-logo {
+  display: flex;
+  align-items: center;
+}
+
+/* Logo 图标：渐变紫色方块 */
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--gradient-main);     /* 紫→粉渐变背景 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition);
+}
+
+/* Logo hover：轻微放大 */
+.logo-icon:hover {
+  transform: scale(1.08);
+}
+
+/* Logo 小号版本：用于页脚 */
+.logo-icon.small {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+}
+
+/* Logo 内的白色字母 */
+.logo-text {
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.logo-icon.small .logo-text {
+  font-size: 13px;
+}
+
+/* 导航链接列表：水平排列，间距 8px */
+.nav-links {
+  display: flex;
+  list-style: none;       /* 去掉列表默认圆点 */
+  gap: 8px;
+}
+
+/* 单个导航链接 */
+.nav-link {
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);   /* 默认次级文字色 */
+  border-radius: var(--radius-sm);
+  transition: color var(--transition), background var(--transition);
+  position: relative;     /* 作为 ::after 伪元素的定位参考 */
+}
+
+/* 导航链接 hover：文字变亮 + 微透明背景 */
+.nav-link:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* 导航链接激活状态：文字最亮 */
+.nav-link.active {
+  color: var(--text-primary);
+}
+
+/* 激活链接下方的渐变下划线：CSS 伪元素实现 */
+.nav-link.active::after {
+  content: '';                /* 伪元素必须有 content 才能显示 */
+  position: absolute;
+  bottom: 2px;                /* 贴在链接底部 */
+  left: 50%;
+  transform: translateX(-50%); /* 水平居中 */
+  width: 20px;
+  height: 2px;
+  background: var(--gradient-main); /* 紫→粉渐变下划线 */
+  border-radius: 2px;
+}
+
+/* 移动端汉堡菜单按钮：默认隐藏，≤768px 时显示 */
+.nav-toggle {
+  display: none;
+  flex-direction: column;   /* 三条横线垂直排列 */
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* 汉堡按钮的三条横线 */
+.nav-toggle span {
+  width: 22px;
+  height: 2px;
+  background: var(--text-secondary);
+  border-radius: 2px;
+  transition: var(--transition);
+}
+
+/* 汉堡按钮打开状态：旋转成 X 形 */
+.nav-toggle.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);   /* 上线旋转 45° */
+}
+.nav-toggle.open span:nth-child(2) {
+  opacity: 0;                                      /* 中线隐藏 */
+}
+.nav-toggle.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);  /* 下线旋转 -45° */
+}
+
+/* 移动端全屏菜单：默认隐藏，添加 .open 后显示 */
+.mobile-menu {
+  display: none;              /* ≤768px 时由响应式 CSS 改为 flex */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(11, 11, 20, 0.96);  /* 几乎不透明的深色背景 */
+  backdrop-filter: blur(20px);
+  z-index: 99;                /* 低于导航栏的 100 */
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;         /* 隐藏且不可交互 */
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+/* 移动端菜单打开状态 */
+.mobile-menu.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 移动端菜单链接列表：垂直排列，居中 */
+.mobile-nav-links {
+  list-style: none;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 移动端菜单单个链接 */
+.mobile-link {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color var(--transition);
+}
+
+.mobile-link:hover {
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   Hero 首屏区域
+   特性：全屏高度，头像 + 姓名 + 标语，渐变光斑背景
+   z-index 层级：光斑(0) → 内容(2) → 滚动线(2)
+   ============================================================ */
+
+/* Hero 容器：全屏高度，flex 居中 */
+.hero {
+  min-height: 100vh;    /* 最小高度 = 视口高度 */
+  display: flex;
+  align-items: center;       /* 垂直居中 */
+  justify-content: center;   /* 水平居中 */
+  position: relative;
+  overflow: hidden;
+  padding: 120px 24px 80px;  /* 上方 120px 避开固定导航栏 */
+}
+
+/* 背景渐变光斑容器：绝对定位铺满 Hero，不拦截鼠标事件 */
+.hero-bg-shapes {
+  position: absolute;
+  inset: 0;            /* 等同于 top/right/bottom/left: 0 */
+  pointer-events: none; /* 鼠标事件穿透 */
+  overflow: hidden;
+}
+
+/* 单个光斑：圆形 + 高斯模糊 = 柔和渐变光晕 */
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);   /* 100px 高斯模糊 */
+  opacity: 0.4;          /* 40% 透明度 */
+}
+
+/* 光斑 1：紫色，右上角，12 秒循环浮动 */
+.shape-1 {
+  width: 500px;
+  height: 500px;
+  background: var(--accent-purple);  /* 紫色 */
+  top: -150px;
+  right: -100px;
+  animation: float1 12s ease-in-out infinite;
+}
+
+/* 光斑 2：粉色，左下角，15 秒循环浮动 */
+.shape-2 {
+  width: 400px;
+  height: 400px;
+  background: var(--accent-pink);    /* 粉色 */
+  bottom: -100px;
+  left: -80px;
+  animation: float2 15s ease-in-out infinite;
+}
+
+/* 光斑 3：蓝色，正中央，10 秒循环缩放 */
+.shape-3 {
+  width: 300px;
+  height: 300px;
+  background: var(--accent-blue);    /* 蓝色 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: float3 10s ease-in-out infinite;
+}
+
+/* 光斑浮动动画 1：左右上下飘动 */
+@keyframes float1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-60px, 40px); }
+}
+
+/* 光斑浮动动画 2 */
+@keyframes float2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(40px, -30px); }
+}
+
+/* 光斑浮动动画 3：缩放效果 */
+@keyframes float3 {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.2); }
+}
+
+/* Hero 主要内容：头像 + 文字，水平排列 */
+.hero-content {
+  display: flex;
+  align-items: center;
+  gap: 80px;            /* 头像和文字之间的间距 */
+  max-width: 1000px;
+  position: relative;
+  z-index: 2;           /* 在光斑层之上 */
+}
+
+/* ========== 头像区域 ========== */
+
+/* 头像外层容器：相对定位，作为光环的参考 */
+.hero-photo-wrapper {
+  position: relative;
+  flex-shrink: 0;       /* 不缩小，保持固定尺寸 */
+}
+
+/* 头像圆形容器：裁剪照片为圆形 */
+.hero-photo {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;   /* 圆形 */
+  overflow: hidden;      /* 超出部分裁剪 */
+  position: relative;
+  z-index: 2;
+  background: var(--bg-card);  /* 照片未加载时的底色 */
+}
+
+/* 头像背景图：通过 JS 修改 style="background-image: url('photos/hero.jpg')" 加载照片 */
+/* 【放照片】把照片放到 photos/ 目录，HTML 中修改 url 路径即可 */
+/* z-index: 2 覆盖在 placeholder(z-index:1) 之上，有照片时自动遮住"放照片"文字 */
+.hero-photo-bg {
+  width: 100%;
+  height: 100%;
+  background-size: cover;       /* 照片铺满容器 */
+  background-position: center;  /* 照片居中显示 */
+  background-repeat: no-repeat; /* 不重复 */
+  position: relative;
+  z-index: 2;                   /* 高于 placeholder 的 1，有照片时遮住占位文字 */
+}
+
+/* 照片占位符：照片未放时显示的虚线框 + 文字 */
+/* z-index: 1，被 photo-bg(z-index:2) 覆盖，有照片时自动隐藏 */
+.photo-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.15));
+  border: 1px dashed rgba(255, 255, 255, 0.15);  /* 虚线边框 */
+  border-radius: inherit;       /* 继承父元素的圆角 */
+  color: var(--text-muted);
+  font-size: 14px;
+  z-index: 1;                   /* 低于 photo-bg 的 2，有照片时被遮住 */
+}
+
+/* 头像外圈光环：脉冲呼吸动画 */
+.photo-ring {
+  position: absolute;
+  inset: -12px;          /* 比头像大 12px */
+  border-radius: 50%;
+  border: 2px solid rgba(139, 92, 246, 0.2);
+  animation: ringPulse 3s ease-in-out infinite;
+}
+
+/* 光环脉冲动画：缩放 + 透明度变化 */
+@keyframes ringPulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+/* ========== Hero 文字区域 ========== */
+
+/* 文字容器 */
+.hero-text {
+  flex: 1;    /* 填充剩余空间 */
+}
+
+/* "你好，我是" 问候语 */
+.hero-greeting {
+  font-size: 15px;
+  color: var(--accent-purple);   /* 紫色 */
+  font-weight: 500;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+/* 姓名：渐变色文字（紫→粉），使用 background-clip:text 技巧 */
+.hero-name {
+  font-size: 56px;
+  font-weight: 700;
+  background: var(--gradient-main);           /* 紫→粉渐变作为背景 */
+  -webkit-background-clip: text;              /* 只在文字区域显示背景 */
+  -webkit-text-fill-color: transparent;       /* 文字填充透明，露出渐变背景 */
+  background-clip: text;                      /* 标准属性 */
+  margin-bottom: 12px;
+  line-height: 1.1;
+}
+
+/* 职业/头衔 */
+.hero-title {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  font-weight: 400;
+}
+
+/* 座右铭/标语 */
+.hero-tagline {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+  font-style: italic;    /* 斜体 */
+}
+
+/* CTA 按钮组：水平排列 */
+.hero-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* ============================================================
+   按钮通用样式
+   三种变体：主按钮（渐变）、幽灵按钮（透明边框）、轮廓按钮
+   ============================================================ */
+
+/* 按钮基础样式 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--radius-xl);  /* 胶囊形圆角 */
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: inherit;    /* 继承 body 字体 */
+}
+
+/* 主按钮：紫→粉渐变背景 + 发光阴影 */
+.btn-primary {
+  background: var(--gradient-main);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+/* 主按钮 hover：上浮 + 阴影增强 */
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(139, 92, 246, 0.4);
+}
+
+/* 幽灵按钮：透明背景 + 极淡边框 */
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+/* 幽灵按钮 hover：变亮 + 紫色边框 */
+.btn-ghost:hover {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+  background: rgba(139, 92, 246, 0.05);
+}
+
+/* 轮廓按钮：用于"查看更多"等次要操作 */
+.btn-outline {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 12px 32px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--transition);
+}
+
+.btn-outline:hover {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+  background: rgba(139, 92, 246, 0.05);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   底部滚动提示线
+   位于 Hero 底部中央，渐变线条上下脉冲
+   ============================================================ */
+
+.scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--accent-purple), transparent);
+  /* 渐变：顶部紫色 → 底部透明 */
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+/* 滚动线脉冲动画：高度和透明度变化 */
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; height: 40px; }
+  50% { opacity: 1; height: 50px; }
+}
+
+/* ============================================================
+   通用 Section 样式
+   所有区域共用的标题、标签、内边距
+   ============================================================ */
+
+/* 区域容器：上下内边距 120px */
+.section {
+  padding: 120px 0;
+}
+
+/* 区域标题区：居中，下边距 64px */
+.section-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+/* 英文小标签：紫色文字 + 紫色边框胶囊 */
+.section-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;          /* 字间距 3px，全大写更高级 */
+  text-transform: uppercase;    /* 英文转大写 */
+  color: var(--accent-purple);
+  margin-bottom: 12px;
+  padding: 6px 16px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: var(--radius-xl);
+  background: rgba(139, 92, 246, 0.05);  /* 极淡紫色背景 */
+}
+
+/* 中文大标题 */
+.section-title {
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+/* 副标题 */
+.section-subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   关于我区域
+   特性：左照片 + 右文字，下方技能卡片网格
+   ============================================================ */
+
+/* 关于区域背景：比主体略深 */
+.about {
+  background: var(--bg-secondary);
+}
+
+/* 上方布局：左照片 + 右文字，flex 水平排列 */
+.about-grid {
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
+  margin-bottom: 80px;
+}
+
+/* 左侧照片列：固定宽度不缩小 */
+.about-photo-col {
+  flex-shrink: 0;
+}
+
+/* 照片外框：圆角矩形，裁剪照片 */
+.about-photo-frame {
+  width: 300px;
+  height: 380px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;        /* 照片超出部分裁剪 */
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+
+/* 照片背景图：通过 HTML style="background-image: url('photos/about.jpg')" 加载 */
+/* z-index: 2 覆盖 placeholder，有照片时自动隐藏"放照片"文字 */
+.about-photo-bg {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  z-index: 2;
+}
+
+/* 照片占位符（大尺寸）：照片未放时显示 */
+.photo-placeholder.large {
+  width: 100%;
+  height: 100%;
+}
+
+/* 右侧文字列 */
+.about-text-col {
+  flex: 1;
+  padding-top: 16px;
+}
+
+/* 姓名 */
+.about-name {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+/* 学校/专业 */
+.about-role {
+  font-size: 15px;
+  color: var(--accent-purple);
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+/* 个人简介段落 */
+.about-desc p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+
+/* 数据统计行：渐变数字 + 灰色标签 */
+.about-stats {
+  display: flex;
+  gap: 40px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color); /* 顶部分隔线 */
+}
+
+/* 单个数据项：居中 */
+.stat-item {
+  text-align: center;
+}
+
+/* 数据数字：渐变色文字 */
+.stat-number {
+  display: block;
+  font-size: 32px;
+  font-weight: 700;
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+/* 数据标签 */
+.stat-label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ========== 技能卡片 ========== */
+
+/* 技能标题 */
+.skills-title {
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* 技能网格：4 列等宽 */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* 单个技能卡片 */
+.skill-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 28px 20px;
+  text-align: center;
+  transition: all var(--transition);
+}
+
+/* 技能卡片 hover：上浮 + 紫色边框 + 发光阴影 */
+.skill-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+}
+
+/* 技能图标（emoji） */
+.skill-icon {
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+
+/* 技能名称 */
+.skill-card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* 技能描述 */
+.skill-card p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   项目展示区域
+   特性：2 列网格，每张卡片上半部分是照片（background-image），
+   下半部分是标题、描述、标签
+   【放照片】修改 .project-image 的 style="background-image: url('photos/xxx.jpg')"
+   照片自动铺满卡片上半部分，无需额外操作
+   ============================================================ */
+
+/* 项目卡片网格：2 列等宽 */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+/* 单个项目卡片 */
+.project-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;       /* 照片超出部分裁剪 */
+  transition: all var(--transition);
+}
+
+/* 项目卡片 hover：上浮 + 紫色边框 + 发光 */
+.project-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-glow);
+}
+
+/* 项目照片区域：高度 220px，通过 background-image 显示照片 */
+/* 【放照片】在 HTML 中修改 style="background-image: url('photos/projectX.jpg')" */
+.project-image {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+  background-size: cover;       /* 照片铺满区域 */
+  background-position: center;  /* 照片居中 */
+  background-repeat: no-repeat; /* 不重复 */
+  background-color: var(--bg-card-hover);  /* 照片未加载时的底色 */
+}
+
+/* 项目照片占位符：默认隐藏，照片未放时由 JS 添加 .show 显示 */
+.project-placeholder {
+  width: 100%;
+  height: 100%;
+  display: none;            /* 默认隐藏，有照片时不需要占位符 */
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--bg-card-hover), rgba(139, 92, 246, 0.08));
+}
+
+/* 照片加载失败时显示占位符 */
+.project-placeholder.show {
+  display: flex;
+}
+
+/* 占位图标（相机 emoji） */
+.placeholder-icon {
+  font-size: 48px;
+  opacity: 0.4;
+}
+
+/* 项目卡片下半部分：文字信息 */
+.project-info {
+  padding: 24px;
+}
+
+/* 项目标题 */
+.project-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* 项目描述 */
+.project-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+/* 项目标签组 */
+.project-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;   /* 标签过多时自动换行 */
+}
+
+/* 单个标签：紫色文字 + 浅紫背景 + 浅紫边框 */
+.tag {
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--accent-purple);
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  border-radius: var(--radius-xl);
+  font-weight: 500;
+}
+
+/* "查看更多" 按钮容器 */
+.projects-more {
+  text-align: center;
+  margin-top: 48px;
+}
+
+/* ============================================================
+   奖项时间线区域
+   特性：左侧渐变竖线 + 右侧卡片，每个节点有紫色圆点
+   ============================================================ */
+
+/* 奖项区域背景 */
+.awards {
+  background: var(--bg-secondary);
+}
+
+/* 时间线容器：相对定位，左侧留出空间绘制竖线 */
+.awards-timeline {
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  padding-left: 32px;
+}
+
+/* 时间线竖线：CSS ::before 伪元素绘制 */
+/* 渐变色：紫→粉→透明，从上到下 */
+.awards-timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;       /* 竖线位置 */
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent-purple), var(--accent-pink), transparent);
+  border-radius: 2px;
+}
+
+/* 单个奖项节点 */
+.award-item {
+  position: relative;
+  margin-bottom: 32px;
+  padding-left: 24px;
+}
+
+.award-item:last-child {
+  margin-bottom: 0;
+}
+
+/* 奖项圆点：渐变色 + 紫色发光 */
+.award-dot {
+  position: absolute;
+  left: -25px;      /* 定位在竖线上 */
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--gradient-main);   /* 紫→粉渐变 */
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);  /* 发光效果 */
+}
+
+/* 奖项卡片 */
+.award-content {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  transition: all var(--transition);
+}
+
+.award-content:hover {
+  border-color: var(--border-hover);
+}
+
+/* 奖项年份标签：紫色胶囊 */
+.award-year {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-purple);
+  background: rgba(139, 92, 246, 0.1);
+  padding: 2px 10px;
+  border-radius: var(--radius-xl);
+  margin-bottom: 8px;
+}
+
+/* 奖项名称 */
+.award-content h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* 奖项描述 */
+.award-content p {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   联系我区域
+   特性：3 列联系卡片 + 底部留言表单
+   ============================================================ */
+
+/* 联系卡片网格：3 列等宽 */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 64px;
+}
+
+/* 单个联系卡片 */
+.contact-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 32px 24px;
+  text-align: center;
+  transition: all var(--transition);
+}
+
+.contact-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+}
+
+/* 联系图标：圆形紫色背景 */
+.contact-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(139, 92, 246, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  color: var(--accent-purple);
+}
+
+/* 联系方式标题 */
+.contact-card h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* 联系方式内容 */
+.contact-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* ========== 留言表单 ========== */
+
+/* 表单容器：居中，最大宽度 600px */
+.message-form {
+  max-width: 600px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+}
+
+.message-form h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* 表单行：两个输入框水平排列 */
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+/* 输入框和文本域通用样式 */
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);   /* 极淡白色背景 */
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;               /* 去掉默认聚焦轮廓 */
+  transition: border-color var(--transition);
+}
+
+/* 输入框聚焦：边框变紫 */
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--accent-purple);
+}
+
+/* 输入框占位符颜色 */
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* 文本域：只允许垂直方向调整大小 */
+.form-textarea {
+  resize: vertical;
+  margin-bottom: 16px;
+}
+
+/* 表单内主按钮：铺满宽度 */
+.message-form .btn-primary {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ============================================================
+   页脚
+   ============================================================ */
+
+.footer {
+  border-top: 1px solid var(--border-color);
+  padding: 48px 0 80px;  /* 底部 80px 留给固定播放器 */
+}
+
+/* 页脚内容居中 */
+.footer-content {
+  text-align: center;
+}
+
+/* 页脚品牌行：Logo + 名称 */
+.footer-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+/* 页脚名称 */
+.footer-name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* 页脚座右铭 */
+.footer-copy {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+/* 页脚链接 */
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.footer-links a {
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: color var(--transition);
+}
+
+.footer-links a:hover {
+  color: var(--accent-purple);
+}
+
+/* 页脚版权 */
+.footer-copyright {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   滚动进入动画
+   JS 使用 IntersectionObserver 检测元素进入视口时添加 .visible
+   ============================================================ */
+
+/* 默认状态：下移 30px + 透明 */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* 进入视口后：回到原位 + 完全不透明 */
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   底部音乐播放器
+   特性：固定在页面底部，毛玻璃背景，包含完整播放控制
+   ============================================================ */
+
+/* 播放器容器：固定在底部，默认隐藏（translateY(100%) 在屏幕外） */
+.player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;         /* 高于导航栏的 100 */
+  background: rgba(11, 11, 20, 0.92);   /* 92% 透明度深色 */
+  backdrop-filter: blur(24px);           /* 毛玻璃模糊 */
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid var(--border-color);
+  /* 初始在屏幕下方，JS 加载后添加 .show 类滑入 */
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 播放器显示状态：滑入屏幕底部 */
+.player.show {
+  transform: translateY(0);
+}
+
+/* 播放器内部布局：水平排列所有元素 */
+.player-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ========== 播放器封面 ========== */
+
+/* 封面容器：44px 正方形，圆角 */
+.player-cover {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  /* 播放时添加旋转动画（由 JS 控制 .playing 类） */
+}
+
+/* 封面背景图：通过 HTML style="background-image: url('photos/cover.jpg')" 加载 */
+/* z-index: 2 覆盖 placeholder，有封面时自动隐藏占位图标 */
+.player-cover-bg {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  z-index: 2;
+}
+
+/* 封面占位符：封面未放时显示的音符图标 */
+.player-cover-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+  color: var(--text-muted);
+  z-index: 1;   /* 在封面图之下 */
+}
+
+/* 播放时封面旋转动画 */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.player-cover.playing {
+  animation: spin 8s linear infinite;   /* 8 秒一圈，匀速无限旋转 */
+  border-radius: 50%;                   /* 旋转时变为圆形 */
+}
+
+/* ========== 曲目信息 ========== */
+
+.player-info {
+  flex-shrink: 0;
+  min-width: 0;
+  width: 140px;
+}
+
+/* 曲目名称：超出省略号 */
+.player-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;       /* 不换行 */
+  overflow: hidden;          /* 超出隐藏 */
+  text-overflow: ellipsis;   /* 超出显示省略号 */
+}
+
+/* 副标题/歌手 */
+.player-artist {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ========== 播放控制按钮 ========== */
+
+/* 按钮组：水平排列 */
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* 小按钮（上一首/下一首/静音）：32px 圆形 */
+.player-btn-sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition), background var(--transition);
+}
+
+.player-btn-sm:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* 播放/暂停主按钮：38px，渐变背景 */
+.player-btn-play {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: var(--gradient-main);    /* 紫→粉渐变 */
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.player-btn-play:hover {
+  transform: scale(1.08);    /* hover 放大 */
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);  /* 紫色发光 */
+}
+
+/* ========== 进度条 ========== */
+
+/* 进度条区域：弹性布局，填满剩余空间 */
+.player-progress-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* 时间文字：等宽数字，固定宽度 */
+.player-time {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;  /* 等宽数字，避免跳动 */
+  flex-shrink: 0;
+  width: 36px;
+}
+
+.player-time:last-child {
+  text-align: right;
+}
+
+/* 进度条容器：可点击跳转 */
+.player-progress {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);  /* 未播放部分：极淡白色 */
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+  min-width: 60px;
+}
+
+/* 已播放进度条：渐变色 */
+.player-progress-bar {
+  height: 100%;
+  background: var(--gradient-main);    /* 紫→粉渐变 */
+  border-radius: 2px;
+  width: 0%;          /* JS 通过 timeupdate 事件动态更新 */
+  transition: width 0.1s linear;
+  position: relative;
+}
+
+/* 进度条拖拽圆点：默认隐藏，hover 时显示 */
+.player-progress-bar::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%) scale(0);  /* 初始缩小不可见 */
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-purple);
+  transition: transform 0.15s;
+}
+
+/* hover 进度条时显示圆点 */
+.player-progress:hover .player-progress-bar::after {
+  transform: translateY(-50%) scale(1);
+}
+
+/* ========== 音量控制 ========== */
+
+/* 音量区域 */
+.player-volume {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* 音量滑块：自定义样式 */
+.player-vol-slider {
+  width: 70px;
+  height: 4px;
+  -webkit-appearance: none;   /* 去掉默认外观 */
+  appearance: none;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* WebKit 浏览器滑块圆点 */
+.player-vol-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-purple);   /* 紫色圆点 */
+  cursor: pointer;
+}
+
+/* Firefox 浏览器滑块圆点 */
+.player-vol-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-purple);
+  border: none;
+  cursor: pointer;
+}
+
+/* ============================================================
+   响应式适配
+   针对不同屏幕宽度调整布局
+   ============================================================ */
+
+/* ----- 平板横屏（≤1024px） ----- */
+@media (max-width: 1024px) {
+  /* Hero 间距缩小 */
+  .hero-content {
+    gap: 50px;
+  }
+
+  /* 头像缩小 */
+  .hero-photo {
+    width: 220px;
+    height: 220px;
+  }
+
+  /* 姓名字号缩小 */
+  .hero-name {
+    font-size: 44px;
+  }
+
+  /* 技能网格改为 2 列 */
+  .skills-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* 关于区域间距缩小 */
+  .about-grid {
+    gap: 40px;
+  }
+
+  /* 照片框缩小 */
+  .about-photo-frame {
+    width: 250px;
+    height: 320px;
+  }
+}
+
+/* ----- 手机/平板竖屏（≤768px） ----- */
+@media (max-width: 768px) {
+  /* 隐藏桌面导航链接 */
+  .nav-links {
+    display: none;
+  }
+
+  /* 显示汉堡按钮 */
+  .nav-toggle {
+    display: flex;
+  }
+
+  /* 启用移动端菜单 */
+  .mobile-menu {
+    display: flex;
+  }
+
+  /* Hero 区域调整 */
+  .hero {
+    padding: 100px 20px 60px;
+  }
+
+  /* Hero 改为垂直排列（头像在上，文字在下） */
+  .hero-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 40px;
+  }
+
+  /* 头像缩小 */
+  .hero-photo {
+    width: 180px;
+    height: 180px;
+  }
+
+  /* 姓名缩小 */
+  .hero-name {
+    font-size: 36px;
+  }
+
+  .hero-title {
+    font-size: 16px;
+  }
+
+  /* 按钮组居中 */
+  .hero-actions {
+    justify-content: center;
+  }
+
+  /* 区域内边距缩小 */
+  .section {
+    padding: 80px 0;
+  }
+
+  .section-title {
+    font-size: 30px;
+  }
+
+  /* 关于区域改为垂直排列 */
+  .about-grid {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  /* 照片框居中 */
+  .about-photo-frame {
+    width: 100%;
+    max-width: 300px;
+    height: 300px;
+    margin: 0 auto;
+  }
+
+  .about-stats {
+    gap: 24px;
+  }
+
+  /* 技能网格 2 列 */
+  .skills-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  /* 项目网格改为 1 列 */
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* 联系卡片改为 1 列 */
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* 表单行改为垂直排列 */
+  .form-row {
+    flex-direction: column;
+  }
+
+  .message-form {
+    padding: 24px;
+  }
+
+  /* 时间线缩小左边距 */
+  .awards-timeline {
+    padding-left: 24px;
+  }
+
+  /* 播放器：隐藏曲目信息和音量，只保留控制按钮和进度条 */
+  .player-info {
+    display: none;
+  }
+
+  .player-volume {
+    display: none;
+  }
+
+  .player-time {
+    display: none;
+  }
+
+  .player-progress-wrap {
+    flex: 1;
+  }
+
+  .player-inner {
+    gap: 10px;
+    padding: 8px 16px;
+  }
+}
+
+/* ----- 小屏手机（≤480px） ----- */
+@media (max-width: 480px) {
+  .hero-name {
+    font-size: 30px;
+  }
+
+  .hero-photo {
+    width: 150px;
+    height: 150px;
+  }
+
+  /* 数据统计改为垂直排列 */
+  .about-stats {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .section-title {
+    font-size: 26px;
+  }
+}
